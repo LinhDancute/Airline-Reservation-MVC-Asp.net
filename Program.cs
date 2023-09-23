@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Authorization;
+using AppRazor.models;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AirlineReservationConnectionString") ?? throw new InvalidOperationException("Connection string 'AirlineReservationConnectionString' not found.");
@@ -26,6 +27,77 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext"));
 });
 
+builder.Services.AddIdentity<AppUser, IdentityRole>()
+                    .AddEntityFrameworkStores<AppDbContext>()
+                    .AddDefaultTokenProviders();
+
+// Truy cập IdentityOptions
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Thiết lập về Password
+    options.Password.RequireDigit = false; // Không bắt phải có số
+    options.Password.RequireLowercase = false; // Không bắt phải có chữ thường
+    options.Password.RequireNonAlphanumeric = false; // Không bắt ký tự đặc biệt
+    options.Password.RequireUppercase = false; // Không bắt buộc chữ in
+    options.Password.RequiredLength = 3; // Số ký tự tối thiểu của password
+    options.Password.RequiredUniqueChars = 1; // Số ký tự riêng biệt
+
+    // Cấu hình Lockout - khóa user
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Khóa 5 phút
+    options.Lockout.MaxFailedAccessAttempts = 3; // Thất bại 5 lầ thì khóa
+    options.Lockout.AllowedForNewUsers = true;
+
+    // Cấu hình về User.
+    options.User.AllowedUserNameCharacters = // các ký tự đặt tên user
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.RequireUniqueEmail = true;  // Email là duy nhất
+
+    // Cấu hình đăng nhập.
+    options.SignIn.RequireConfirmedEmail = true;            // Cấu hình xác thực địa chỉ email (email phải tồn tại)
+    options.SignIn.RequireConfirmedPhoneNumber = false;     // Xác thực số điện thoại
+    options.SignIn.RequireConfirmedAccount = true;         //Xác thực tài khoản
+});
+
+// var mailSetting = builder.Configuration.GetSection("MailSettings");
+// builder.Services.Configure<MailSettings>(mailSetting);
+// builder.Services.AddSingleton<IEmailSender, SendMailService>();
+// builder.Services.ConfigureApplicationCookie(options =>
+//         {
+//             options.LoginPath = "/login/";
+//             options.LogoutPath = "/logout/";
+//             options.AccessDeniedPath = "/khongduoctruycap.html";
+//         });
+
+builder.Services.Configure<SecurityStampValidatorOptions>(options =>
+{
+    // Trên 30 giây truy cập lại sẽ nạp lại thông tin User (Role)
+    // SecurityStamp trong bảng User đổi -> nạp lại thông tinn Security
+    options.ValidationInterval = TimeSpan.FromSeconds(5);
+});
+
+builder.Services.AddAuthentication().AddCookie()
+                .AddGoogle(options =>
+                {
+                    var gconfig = configuration.GetSection("Authentication:Google");
+                    options.ClientId = gconfig["ClientId"];
+                    options.ClientSecret = gconfig["ClientSecret"];
+                    options.CorrelationCookie.SameSite = SameSiteMode.Lax;
+                    options.CallbackPath = "/dang-nhap-tu-google"; // Relative path instead of absolute URL
+                })
+                .AddFacebook(options =>
+                {
+                    var fconfig = configuration.GetSection("Authentication:Facebook");
+                    options.AppId = fconfig["AppId"];
+                    options.AppSecret = fconfig["AppSecret"];
+                    options.CallbackPath = "/dang-nhap-tu-facebook";
+                });
+// .AddTwitter()
+// .AddMicrosoftAccount();
+
+builder.Services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.MinimumSameSitePolicy = SameSiteMode.Strict;
+            });
 
 var app = builder.Build();
 
