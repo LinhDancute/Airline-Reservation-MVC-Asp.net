@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using App.Models.Contacts;
-using AppRazor.models;
+using App.Models;
 
 namespace App.Models
 {

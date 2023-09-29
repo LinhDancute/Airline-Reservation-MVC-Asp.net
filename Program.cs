@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Authorization;
-using AppRazor.models;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AirlineReservationConnectionString") ?? throw new InvalidOperationException("Connection string 'AirlineReservationConnectionString' not found.");
@@ -98,7 +97,6 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
             {
                 options.MinimumSameSitePolicy = SameSiteMode.Strict;
             });
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -116,6 +114,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -127,6 +126,9 @@ app.Run();
 
 
 /*
+dotnet aspnet-codegenerator area Database
+dotnet aspnet-codegenerator controller -name DbManage -outDir Areas/Database/Controllers/ -namespace App.Areas.Database.Controllers
+
 -Tạo các trang Index/CRUD trong Areas/Contact/Views, trang ContactController trong Areas/Contact/Controllers dựa vào trang Contact.cs trong Models/Contact 
   - dotnet aspnet-codegenerator controller -name ContactController -namespace App.Areas.Contact.Controllers -m App.Models.Contacts.Contact -udl -dc App.Models.AppDBContext -outDir Areas/Contact/Controllers
   - mv Views/Contact Areas/Contact/Views/
