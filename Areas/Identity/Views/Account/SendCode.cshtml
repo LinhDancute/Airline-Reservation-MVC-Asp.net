@@ -5,16 +5,35 @@
 
 <h1>@ViewData["Title"].</h1>
 
-<form asp-controller="Account" asp-action="SendCode" asp-route-returnurl="@Model.ReturnUrl" method="post" class="form-horizontal" role="form">
-    <input asp-for="RememberMe" type="hidden" />
-    <div class="row">
-        <div class="col-md-8">
-            Mã xác thực gửi tới:
-            <select asp-for="SelectedProvider" asp-items="Model.Providers"></select>
-            <button type="submit" class="btn btn-success btn-sm">Gửi</button>
+
+
+@if (Model != null)
+
+{
+    <form asp-controller="Account" asp-action="SendCode" asp-route-returnurl="@Model.ReturnUrl" method="post"
+        class="form-horizontal" role="form" enctype="application/x-www-form-urlencoded">
+        <input asp-for="RememberMe" type="hidden" />
+        <div class="row">
+            <div class="col-md-8">
+                Mã xác thực gửi tới:
+                <select asp-for="SelectedProvider" asp-items="Model.Providers" class="form-control"></select>
+                @Html.ValidationSummary()
+                @* <button type="submit" class="btn btn-success btn-sm">Gửi</button> *@
+                <button type="submit" class="btn btn-success btn-sm" title="Send">Gửi</button>
+
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+}
+
+else
+
+{
+    <p>Error: Model is null.</p>
+}
+
+
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
