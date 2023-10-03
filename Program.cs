@@ -1,9 +1,10 @@
+
+using App;
 using App.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using App.Services;
-using App.Data;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AirlineReservationConnectionString") ?? throw new InvalidOperationException("Connection string 'AirlineReservationConnectionString' not found.");
@@ -58,7 +59,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 var mailSetting = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSettings>(mailSetting);
-builder.Services.AddSingleton<IEmailSender, SendMailService>();
+builder.Services.AddScoped<IEmailSender, SendMailService>();
 builder.Services.ConfigureApplicationCookie(options =>
         {
             options.LoginPath = "/login/";
@@ -96,18 +97,6 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
             {
                 options.MinimumSameSitePolicy = SameSiteMode.Strict;
             });
-
-builder.Services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();
-
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("ViewManageMenu", builder =>
-    {
-        builder.RequireAuthenticatedUser();
-        builder.RequireRole(RoleName.Administrator);
-    });
-});
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -118,6 +107,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+builder.Services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>(); 
 //builder.Services.AddSingleton(typeof(ProductService), typeof(ProductService));
 
 app.UseHttpsRedirection();
