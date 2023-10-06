@@ -143,4 +143,6 @@ dotnet aspnet-codegenerator controller -name DbManage -outDir Areas/Database/Con
 -Tạo các trang Index/CRUD trong Areas/Contact/Views, trang ContactController trong Areas/Contact/Controllers dựa vào trang Contact.cs trong Models/Contact 
   - dotnet aspnet-codegenerator controller -name ContactController -namespace App.Areas.Contact.Controllers -m App.Models.Contacts.Contact -udl -dc App.Models.AppDBContext -outDir Areas/Contact/Controllers
   - mv Views/Contact Areas/Contact/Views/
+
+  dotnet aspnet-codegenerator controller -name CategoryCotrller -m App.Models.Blog.Category -dc App.Models.AppDbContext -udl -outDir Areas/Blog/Controllers/
 */

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using App.Models.Contacts;
 using App.Models;
+using App.Models.Blogs;
 
 namespace App.Models
 {
@@ -33,8 +34,23 @@ namespace App.Models
                     entityType.SetTableName(tableName.Substring(6));
                 }
             }
+
+            modelBuilder.Entity<Category>(e =>
+            {
+                e.ToTable("Categories");
+                e.HasKey(c => c.Id);
+                e.HasIndex(c => c.Slug);
+
+
+                // e.HasMany(c => c.Product)  // CategoryData has many Products
+                // .WithOne(p => p.Category)  // ProductData has one Category
+                // .HasForeignKey(p => p.CategoryID)
+                // .HasConstraintName("FK_Product_Category");
+            });
         }
 
-        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<App.Models.Contacts.Contact> Contacts { get; set; }
+        public DbSet<App.Models.Blogs.Category> Categories { set; get; }
+
     }
 }
