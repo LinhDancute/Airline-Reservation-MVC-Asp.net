@@ -127,19 +127,19 @@ namespace App.Areas.Blog.Controllers
             {
                 category.ParentCategoryId = null; // Set to null if it's -1
             }
-            int categoryIdToCheck = 41112; // Replace with the ID of the category you want to check
+            // int categoryIdToCheck = 41112; // Replace with the ID of the category you want to check
 
-            bool categoryChildrenExist = _context.Categories
-                                                 .Any(c => c.Id == categoryIdToCheck && c.CategoryChildren != null && c.CategoryChildren.Any());
+            // bool categoryChildrenExist = _context.Categories
+            //                                      .Any(c => c.Id == categoryIdToCheck && c.CategoryChildren != null && c.CategoryChildren.Any());
 
-            if (categoryChildrenExist)
-            {
-                Console.WriteLine("CategoryChildren exist.");
-            }
-            else
-            {
-                Console.WriteLine("CategoryChildren do not exist.");
-            }
+            // if (categoryChildrenExist)
+            // {
+            //     Console.WriteLine("CategoryChildren exist.");
+            // }
+            // else
+            // {
+            //     Console.WriteLine("CategoryChildren do not exist.");
+            // }
 
 
             if (ModelState.IsValid)
@@ -182,6 +182,41 @@ namespace App.Areas.Blog.Controllers
             // Return to the Create view with validation errors
             return View(category);
         }
+
+        // GET: Blog/Category/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            var qr = (from c in _context.Categories select c)
+                     .Include(c => c.ParentCategory)
+                     .Include(c => c.CategoryChildren);
+
+            var categories = (await qr.ToListAsync())
+                             .Where(c => c.ParentCategory == null)
+                             .ToList();
+            categories.Insert(0, new Category()
+            {
+                Id = -1,
+                Title = "Không có danh mục cha"
+            });
+            var items = new List<Category>();
+            CreateSelectItems(categories, items, 0);
+            var selectList = new SelectList(items, "Id", "Title");
+
+            ViewData["ParentCategoryId"] = selectList;
+            return View(category);
+        }
+
 
         // POST: Blog/Category/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.

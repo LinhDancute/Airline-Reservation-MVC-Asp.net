@@ -35,17 +35,33 @@ namespace App.Models.Blogs
         public string Slug { set; get; }
 
         // Các Category con
-        public ICollection<Category> CategoryChildren { get; set; }
+        public ICollection<Category>? CategoryChildren { get; set; }
 
         public Category()
         {
             CategoryChildren = new HashSet<Category>();
         }
+        
+        //Override the ToString method to display a custom representation of CategoryChildren
+        public override string ToString()
+        {
+            if (CategoryChildren == null || !CategoryChildren.Any())
+            {
+                return "No child categories";
+            }
+
+            var childCategoryNames = CategoryChildren
+                .Where(child => child is Category)  // Filter only Category objects
+                .Select(child => child.Title);     // Get their titles
+
+            return string.Join(" , ", childCategoryNames);
+        }
+
+
         [ForeignKey("ParentCategoryId")]
         [Display(Name = "Danh mục cha")]
 
-
-        public Category ParentCategory { set; get; }
+        public Category? ParentCategory { set; get; }
 
     }
 }

@@ -16,18 +16,18 @@
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.Content)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Slug)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ParentCategory)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.CategoryChildren)
-            </th>
+            </th> *@
             <th></th>
         </tr>
     </thead>
@@ -54,9 +54,9 @@
                     @Html.DisplayFor(modelItem => item.Title)
                 </a>
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.Content)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.Slug)
             </td>
@@ -67,10 +67,10 @@
                     @Html.DisplayFor(modelItem => item.ParentCategory.Title)
                 }
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.CategoryChildren)
 
-            </td>
+            </td> *@
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Xóa</a>
