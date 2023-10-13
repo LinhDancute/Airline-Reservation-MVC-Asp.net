@@ -13,7 +13,7 @@ namespace App.Areas.Identity.Models.AccountViewModels
         [Required]
         public string Code { get; set; }
 
-        public string ReturnUrl { get; set; }
+        public string? ReturnUrl { get; set; }
 
         [Display(Name = "Nhớ cho trình duyệt này?")]
         public bool RememberBrowser { get; set; }

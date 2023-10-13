@@ -37,6 +37,10 @@ namespace App.Models.Blogs
         // Các Category con
         public ICollection<Category> CategoryChildren { get; set; }
 
+        public Category()
+        {
+            CategoryChildren = new HashSet<Category>();
+        }
         [ForeignKey("ParentCategoryId")]
         [Display(Name = "Danh mục cha")]
 

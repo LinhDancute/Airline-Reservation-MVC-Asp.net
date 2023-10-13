@@ -539,6 +539,7 @@ namespace App.Areas.Identity.Controllers
                 }
                 var providersErrorMessage = ModelState["Providers"]?.Errors.FirstOrDefault()?.ErrorMessage;
                 _logger.LogError($"Providers field error: {providersErrorMessage}");
+                return View();
             }
 
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
@@ -619,6 +620,7 @@ namespace App.Areas.Identity.Controllers
                 }
                 var codeErrorMessage = ModelState["Code"]?.Errors.FirstOrDefault()?.ErrorMessage;
                 _logger.LogError($"Code field error: {codeErrorMessage}");
+                return View();
             }
 
             // The following code protects for brute force attacks against the two factor codes.

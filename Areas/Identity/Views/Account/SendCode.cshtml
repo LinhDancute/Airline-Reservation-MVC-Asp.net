@@ -17,6 +17,7 @@
             <div class="col-md-8">
                 Mã xác thực gửi tới:
                 <select asp-for="SelectedProvider" asp-items="Model.Providers" class="form-control"></select>
+                <br>
                 @Html.ValidationSummary()
                 @* <button type="submit" class="btn btn-success btn-sm">Gửi</button> *@
                 <button type="submit" class="btn btn-success btn-sm" title="Send">Gửi</button>

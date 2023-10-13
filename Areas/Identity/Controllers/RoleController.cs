@@ -192,7 +192,9 @@ namespace App.Areas.Identity.Controllers
         public async Task<IActionResult> AddRoleClaimAsync(string roleid)
         {
             if (roleid == null) return NotFound("Không tìm thấy role");
+
             var role = await _roleManager.FindByIdAsync(roleid);
+
             if (role == null)
             {
                 return NotFound("Không tìm thấy role");
@@ -210,14 +212,27 @@ namespace App.Areas.Identity.Controllers
         [ValidateAntiForgeryToken]      
         public async Task<IActionResult> AddRoleClaimAsync(string roleid, [Bind("ClaimType", "ClaimValue")]EditClaimModel model)
         {
+            _logger.LogInformation($"roleid: {roleid}");
             if (roleid == null) return NotFound("Không tìm thấy role");
             var role = await _roleManager.FindByIdAsync(roleid);
+            _logger.LogInformation($"role: {role}");
+
             if (role == null)
             {
                 return NotFound("Không tìm thấy role");
             } 
             model.role = role;
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid) {
+                foreach (var modelState in ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        // Log or debug the validation error messages
+                        Console.WriteLine($"Validation Error: {error.ErrorMessage}");
+                    }
+                }
+                return View(model);
+            }
 
 
             if ((await _roleManager.GetClaimsAsync(role)).Any(c => c.Type == model.ClaimType && c.Value == model.ClaimValue))
@@ -246,6 +261,7 @@ namespace App.Areas.Identity.Controllers
         public async Task<IActionResult> EditRoleClaim(int claimid)
         {
             var claim = _context.RoleClaims.Where(c => c.Id == claimid).FirstOrDefault();
+
             if (claim == null) return NotFound("Không tìm thấy role");
 
             var role = await _roleManager.FindByIdAsync(claim.RoleId);
@@ -269,6 +285,7 @@ namespace App.Areas.Identity.Controllers
         public async Task<IActionResult> EditRoleClaim(int claimid, [Bind("ClaimType", "ClaimValue")]EditClaimModel Input)
         {
             var claim = _context.RoleClaims.Where(c => c.Id == claimid).FirstOrDefault();
+
             if (claim == null) return NotFound("Không tìm thấy role");
 
             ViewBag.claimid = claimid;

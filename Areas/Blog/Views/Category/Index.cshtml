@@ -25,15 +25,17 @@
             <th>
                 @Html.DisplayNameFor(model => model.ParentCategory)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryChildren)
+            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
 
         @foreach (var item in Model)
         {
-
             await RenderCategory(item, 0);
-
         }
 
     </tbody>
@@ -53,7 +55,21 @@
                 </a>
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Slug)
+            </td>
+            <td>
+                @if (item.ParentCategory != null)
+
+                {
+                    @Html.DisplayFor(modelItem => item.ParentCategory.Title)
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryChildren)
+
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a> |
@@ -64,15 +80,20 @@
 
         {
 
-            foreach (var cCategory in item.CategoryChildren)
+            foreach (var Category in item.CategoryChildren)
 
             {
 
-                await RenderCategory(cCategory, level + 1);
+                await RenderCategory(Category, level + 1);
 
             }
 
         }
 
+    }
+}
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }

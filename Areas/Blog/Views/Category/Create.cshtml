@@ -4,9 +4,6 @@
     ViewData["Title"] = "Tạo chuyên mục Blog";
 }
 
-
-
-
 <h1>@ViewData["Title"]</h1>
 
 <h4>Category</h4>
@@ -18,8 +15,9 @@
 
             <div class="form-group">
                 <label asp-for="ParentCategoryId" class="control-label"></label>
-                <select asp-for="ParentCategoryId" class="form-control" asp-items="ViewBag.ParentCategoryId"></select>
+                <select asp-for="ParentCategoryId" asp-items="ViewBag.ParentCategoryId" class="form-control"></select>
             </div>
+
 
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -48,8 +46,4 @@
     <a asp-action="Index">Danh sách chuyên mục</a>
 </div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+

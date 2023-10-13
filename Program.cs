@@ -108,6 +108,12 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
+builder.Services.AddMvc().AddViewOptions(options =>
+{
+    options.HtmlHelperOptions.ClientValidationEnabled = false;
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
