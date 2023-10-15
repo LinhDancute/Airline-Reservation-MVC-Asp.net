@@ -32,7 +32,7 @@ namespace App.Models.Blogs
         [StringLength(100, MinimumLength = 3, ErrorMessage = "{0} dài {1} đến {2}")]
         [RegularExpression(@"^[a-z0-9-]*$", ErrorMessage = "Chỉ dùng các ký tự [a-z0-9-]")]
         [Display(Name = "Url hiện thị")]
-        public string Slug { set; get; }
+        public string? Slug { set; get; }
 
         // Các Category con
         public ICollection<Category>? CategoryChildren { get; set; }
@@ -62,6 +62,9 @@ namespace App.Models.Blogs
         [Display(Name = "Danh mục cha")]
 
         public Category? ParentCategory { set; get; }
+
+        //relationship 
+        public List<Post> Posts { get; } = new();
 
     }
 }

@@ -21,12 +21,16 @@ var configuration = new ConfigurationBuilder()
 // Register the MyBlogContext with the dependency injection container.
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    //options.UseSqlServer(connectionString);
-    options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext"));
+    options.UseSqlServer(connectionString);
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext"));
 });
+
+// builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
+//         .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddIdentity<AppUser, IdentityRole>()
                     .AddEntityFrameworkStores<AppDbContext>()
+                    .AddDefaultUI()
                     .AddDefaultTokenProviders();
 
 // Truy cập IdentityOptions

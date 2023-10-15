@@ -1,0 +1,10 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace App.Models.Blogs
+{
+    [Table("PostCategory")]
+    public class PostCategory {
+        public int PostID { set; get; }
+        public int CategoryID { set; get; }
+    }
+}
