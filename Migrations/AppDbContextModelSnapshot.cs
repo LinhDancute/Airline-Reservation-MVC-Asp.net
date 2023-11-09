@@ -123,6 +123,9 @@ namespace AppMvc.Net.Migrations
 
                     b.HasIndex("ParentCategoryId");
 
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
                     b.ToTable("Categories", (string)null);
                 });
 
@@ -380,17 +383,21 @@ namespace AppMvc.Net.Migrations
 
             modelBuilder.Entity("App.Models.Blogs.PostCategory", b =>
                 {
-                    b.HasOne("App.Models.Blogs.Category", null)
+                    b.HasOne("App.Models.Blogs.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("App.Models.Blogs.Post", null)
-                        .WithMany()
+                    b.HasOne("App.Models.Blogs.Post", "Post")
+                        .WithMany("PostCategories")
                         .HasForeignKey("PostID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -447,6 +454,11 @@ namespace AppMvc.Net.Migrations
             modelBuilder.Entity("App.Models.Blogs.Category", b =>
                 {
                     b.Navigation("CategoryChildren");
+                });
+
+            modelBuilder.Entity("App.Models.Blogs.Post", b =>
+                {
+                    b.Navigation("PostCategories");
                 });
 #pragma warning restore 612, 618
         }

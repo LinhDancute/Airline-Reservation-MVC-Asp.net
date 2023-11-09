@@ -20,7 +20,7 @@ namespace App.Models.Blogs
         [Required(ErrorMessage = "Phải có tên danh mục")]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "{0} dài {1} đến {2}")]
         [Display(Name = "Tên danh mục")]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         // Nội dung, thông tin chi tiết về Category
         [DataType(DataType.Text)]
@@ -64,7 +64,8 @@ namespace App.Models.Blogs
         public Category? ParentCategory { set; get; }
 
         //relationship 
-        public List<Post> Posts { get; } = new();
+        // public List<Post> Posts { get; set; } = new List<Post>();
+        // public List<PostCategory> PostCategories { get; set; }
 
     }
 }

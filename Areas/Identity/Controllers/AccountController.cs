@@ -150,7 +150,7 @@ namespace App.Areas.Identity.Controllers
 
                     await _emailSender.SendEmailAsync(model.Email, 
                         "Xác nhận địa chỉ email",
-                        @$"Bạn đã đăng ký tài khoản trên RazorWeb, 
+                        @$"Bạn đã đăng ký tài khoản trên Airline Reversation Vietjet, 
                            hãy <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>bấm vào đây</a> 
                            để kích hoạt tài khoản.");
 
@@ -475,20 +475,6 @@ namespace App.Areas.Identity.Controllers
 
         //
         // GET: /Account/SendCode
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<ActionResult> SendCode(string returnUrl = null, bool rememberMe = false)
-        {
-            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
-            {
-                return View("Error");
-            }
-            var userFactors = await _userManager.GetValidTwoFactorProvidersAsync(user);
-            var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
-            return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
-
-        }
         // [HttpGet]
         // [AllowAnonymous]
         // public async Task<ActionResult> SendCode(string returnUrl = null, bool rememberMe = false)
@@ -498,28 +484,42 @@ namespace App.Areas.Identity.Controllers
         //     {
         //         return View("Error");
         //     }
-
-        //     // Ensure you populate the Providers property
         //     var userFactors = await _userManager.GetValidTwoFactorProvidersAsync(user);
         //     var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
+        //     return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
 
-        //     // Initialize and populate the ViewModel
-        //     var model = new SendCodeViewModel
-        //     {
-        //         Providers = factorOptions,
-        //         ReturnUrl = returnUrl,
-        //         RememberMe = rememberMe
-        //     };
-
-        //     // Log model information
-        //     _logger.LogInformation($"ModelState.IsValid: {ModelState.IsValid}");
-        //     _logger.LogInformation($"Model is not null: {model != null}");
-        //     _logger.LogInformation($"Model.Providers is not null: {model != null && model.Providers != null}");
-        //     _logger.LogInformation($"SelectedProvider (from model): {model.SelectedProvider}");
-
-        //     // Return the view with the model
-        //     return View(model);
         // }
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult> SendCode(string returnUrl = null, bool rememberMe = false)
+        {
+            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            // Ensure you populate the Providers property
+            var userFactors = await _userManager.GetValidTwoFactorProvidersAsync(user);
+            var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
+
+            // Initialize and populate the ViewModel
+            var model = new SendCodeViewModel
+            {
+                Providers = factorOptions,
+                ReturnUrl = returnUrl,
+                RememberMe = rememberMe
+            };
+
+            // Log model information
+            _logger.LogInformation($"ModelState.IsValid: {ModelState.IsValid}");
+            _logger.LogInformation($"Model is not null: {model != null}");
+            _logger.LogInformation($"Model.Providers is not null: {model != null && model.Providers != null}");
+            _logger.LogInformation($"SelectedProvider (from model): {model.SelectedProvider}");
+
+            // Return the view with the model
+            return View(model);
+        }
 
         [HttpPost]
         [AllowAnonymous]

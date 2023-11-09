@@ -37,9 +37,6 @@ namespace App.Areas.Contact.Controllers
                 return NotFound();
             }
 
-
-
-
             var contact = await _context.Contacts
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (contact == null)

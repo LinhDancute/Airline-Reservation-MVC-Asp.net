@@ -4,29 +4,24 @@ using Microsoft.AspNetCore.Identity;
 using App.Services;
 using App.Data;
 using Microsoft.AspNetCore.Builder;
+using App.ExtendMethods;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("AirlineReservationConnectionString") ?? throw new InvalidOperationException("Connection string 'AirlineReservationConnectionString' not found.");
+// var connectionString = builder.Configuration.GetConnectionString("AirlineReservationDb") ?? throw new InvalidOperationException("Connection string 'AirlineReservationDb' not found.");
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 
 // Load appsettings.json configurations
-var configuration = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json")
-    .Build();
+IConfiguration configuration = new ConfigurationBuilder()
+               .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+               .AddJsonFile("appsettings.json")
+               .Build();
 
 // Register the MyBlogContext with the dependency injection container.
 builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseSqlServer(connectionString);
-    //options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext"));
-});
-
-// builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
-//         .AddEntityFrameworkStores<AppDbContext>();
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AirlineReservationDb")));
 
 builder.Services.AddIdentity<AppUser, IdentityRole>()
                     .AddEntityFrameworkStores<AppDbContext>()
@@ -133,10 +128,13 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
 
-app.UseAuthentication();
-app.UseAuthorization();
+app.AddStatusCodePage(); // Tuy bien Response loi: 400 - 599
+
+app.UseRouting();        // EndpointRoutingMiddleware
+
+app.UseAuthentication(); // xac dinh danh tinh 
+app.UseAuthorization();  // xac thuc  quyen truy  cap
 
 app.MapControllerRoute(
     name: "default",
@@ -145,6 +143,38 @@ app.MapControllerRoute(
 
 app.Run();
 
+app.UseEndpoints(endpoints =>
+            {
+                // /sayhi
+                endpoints.MapGet("/sayhi", async (context) =>
+                {
+                    await context.Response.WriteAsync($"Hello ASP.NET MVC {DateTime.Now}");
+                });
+
+                // endpoints.MapControllers
+                // endpoints.MapControllerRoute
+                // endpoints.MapDefaultControllerRoute
+                // endpoints.MapAreaControllerRoute
+
+                // [AcceptVerbs]
+
+                // [Route]
+
+                // [HttpGet]
+                // [HttpPost]
+                // [HttpPut]
+                // [HttpDelete]
+                // [HttpHead]
+                // [HttpPatch]
+
+                // Controller khong co Area
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "/{controller=Home}/{action=Index}/{id?}"
+                );
+
+                endpoints.MapRazorPages();
+            });
 
 /*
 dotnet aspnet-codegenerator area Database
@@ -155,4 +185,8 @@ dotnet aspnet-codegenerator controller -name DbManage -outDir Areas/Database/Con
   - mv Views/Contact Areas/Contact/Views/
 
   dotnet aspnet-codegenerator controller -name CategoryCotrller -m App.Models.Blog.Category -dc App.Models.AppDbContext -udl -outDir Areas/Blog/Controllers/
+
+JSON
+    "AirlineReservationDb": "Data Source=127.0.0.1,1433; Initial Catalog=AirlineReservationDB; User ID=SA;Password=yunbrayyunh; TrustServerCertificate=true;",
+    "AirlineReservationConnectionString": "Server=(localdb)\\mssqllocaldb;Database=App;Trusted_Connection=True;MultipleActiveResultSets=true"
 */

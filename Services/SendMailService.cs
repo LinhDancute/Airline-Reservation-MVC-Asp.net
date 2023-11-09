@@ -52,11 +52,16 @@ public class SendMailService : IEmailSender {
 
         // dùng SmtpClient của MailKit
         using var smtp = new MailKit.Net.Smtp.SmtpClient();
+        System.IO.Directory.CreateDirectory("mailssave");
 
-        try {
+        try
+        {
             smtp.Connect (mailSettings.Host, mailSettings.Port, SecureSocketOptions.StartTls);
             smtp.Authenticate (mailSettings.Mail, mailSettings.Password);
             await smtp.SendAsync(message);
+
+            var emailsavefile = string.Format(@"mailssave/{0}.eml", Guid.NewGuid());
+            await message.WriteToAsync(emailsavefile);
         }
         
         catch (Exception ex) {
@@ -69,11 +74,8 @@ public class SendMailService : IEmailSender {
             logger.LogError(ex.Message);
         }
 
-        smtp.Disconnect (true);
-
+        smtp.Disconnect(true);
         logger.LogInformation("send mail to " + email);
-
-
     }
 
         public Task SendSmsAsync(string number, string message)

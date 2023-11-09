@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using App.Models.Contacts;
 using App.Models;
@@ -8,7 +9,7 @@ namespace App.Models
 {
     public class AppDbContext : IdentityDbContext<AppUser>
     {
-        private readonly IConfiguration _configuration;
+        public IConfiguration _configuration { get; }
         public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration)
         : base(options)
         {
@@ -16,9 +17,9 @@ namespace App.Models
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //base.OnConfiguring(optionsBuilder);
-            string connectionString = _configuration.GetConnectionString("AirlineReservationDb"); 
-            optionsBuilder.UseSqlServer(connectionString);
+            base.OnConfiguring(optionsBuilder);
+            // string connectionString = _configuration.GetConnectionString("AirlineReservationDb"); 
+            // optionsBuilder.UseSqlServer(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,13 +39,7 @@ namespace App.Models
             {
                 e.ToTable("Categories");
                 e.HasKey(c => c.Id);
-                //e.HasIndex(c => c.Slug).IsUnique();
-
-
-                // e.HasMany(c => c.Product)  // CategoryData has many Products
-                // .WithOne(p => p.Category)  // ProductData has one Category
-                // .HasForeignKey(p => p.CategoryID)
-                // .HasConstraintName("FK_Product_Category");
+                e.HasIndex(c => c.Slug).IsUnique();
             });
 
             modelBuilder.Entity<Post>(e =>
@@ -53,17 +48,12 @@ namespace App.Models
                 e.HasKey(p => p.PostId);
                 e.HasIndex(p => p.Slug).IsUnique();
 
-                e.HasMany(c => c.Categories)
-                 .WithMany(p => p.Posts)
-                 .UsingEntity<PostCategory>(
-                    l => l.HasOne<Category>().WithMany().HasForeignKey(e => e.CategoryID),
-                    r => r.HasOne<Post>().WithMany().HasForeignKey(e => e.PostID),
-                    j =>
-                    {
-                        j.HasKey(pc => new { pc.PostID, pc.CategoryID });
-                        j.ToTable("PostCategories");
-                    }
-                 );
+                // e.HasMany(c => c.Categories)
+                //  .WithMany(p => p.Posts)
+                //  .UsingEntity<PostCategory>(
+                //     l => l.HasOne<Category>().WithMany().HasForeignKey(e => e.CategoryID),
+                //     r => r.HasOne<Post>().WithMany().HasForeignKey(e => e.PostID)
+                //  );
             });
 
             modelBuilder.Entity<PostCategory>(e =>

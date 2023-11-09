@@ -11,7 +11,7 @@ namespace App.Models.Blogs
         [Required(ErrorMessage = "Phải có tiêu đề bài viết")]
         [Display(Name = "Tiêu đề")]
         [StringLength(160, MinimumLength = 5, ErrorMessage = "{0} dài {1} đến {2}")]
-        public string Title { set; get; }
+        public string? Title { set; get; }
 
         [Display(Name = "Mô tả ngắn")]
         public string Description { set; get; }
@@ -42,6 +42,9 @@ namespace App.Models.Blogs
 
         //relationship
         //many-to-many relationship with Category
-        public List<Category> Categories { get; } = new();
+       // public List<Category> Categories { get; set; } = new List<Category>();
+        public List<PostCategory> PostCategories { get; set; }
+
+
     }
 }
