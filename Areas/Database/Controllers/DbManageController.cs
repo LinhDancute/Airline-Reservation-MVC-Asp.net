@@ -136,7 +136,7 @@ namespace App.Areas.Database.Controllers
             var fakerPost = new Faker<Post>();
             fakerPost.RuleFor(p => p.AuthorId, f => user.Id);
             fakerPost.RuleFor(p => p.Content, f => f.Lorem.Paragraphs(7) + "[fakeData]");
-            fakerPost.RuleFor(p => p.DateCreated, f => f.Date.Between(new DateTime(2021, 1, 1), new DateTime(2021, 7, 1)));
+            fakerPost.RuleFor(p => p.DateCreated, f => f.Date.Between(new DateTime(2021, 1, 1), new DateTime(2023, 7, 1)));
             fakerPost.RuleFor(p => p.Description, f => f.Lorem.Sentences(3));
             fakerPost.RuleFor(p => p.Published, f => true);
             fakerPost.RuleFor(p => p.Slug, f => f.Lorem.Slug());

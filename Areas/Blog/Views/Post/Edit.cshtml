@@ -1,4 +1,4 @@
-@model App.Models.Blogs.Post
+@model App.Areas.Blogs.Models.CreatePostModel
 
 @{
     ViewData["Title"] = "Cập nhật bài viết";
@@ -13,16 +13,11 @@
         <form asp-action="Edit">
             <div asp-validation-summary="All" class="text-danger"></div>
             <input type="hidden" asp-for="PostId" />
-            @* <div class="form-group">
+            <div class="form-group">
                 <label asp-for="CategoryIDs" class="control-label"></label>
                 <select asp-for="CategoryIDs" multiple="multiple" asp-items="list" class="w-100"></select>
                 <span asp-validation-for="CategoryIDs" class="text-danger"></span>
-            </div> *@
-            @* <div class="form-group">
-                <label asp-for="CategoryID" class="control-label"></label>
-                <select asp-for="CategoryID" multiple="multiple" asp-items="list" class="w-100"></select>
-                <span asp-validation-for="CategoryID" class="text-danger"></span>
-            </div> *@
+            </div>
 
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>

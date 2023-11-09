@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Danh sách BLog";
+
+    
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -25,9 +27,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Slug)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.Content)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Published)
             </th>
@@ -53,11 +55,6 @@
                         <a asp-action="Edit" asp-route-id="@item.PostId">
                             @Html.DisplayFor(modelItem => item.Title)
                         </a>
-                        <br>
-                        @* <small>
-                            @string.Join(", ", item.PostCategories.Select(pc => pc?.Category?.Title).Where(title =>
-                                     !string.IsNullOrEmpty(title)))
-                        </small> *@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Description)
@@ -65,9 +62,9 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Slug)
                     </td>
-                    <td>
+                    @* <td>
                         @Html.DisplayFor(modelItem => item.Content)
-                    </td>
+                    </td> *@
                     <td>
                         @Html.DisplayFor(modelItem => item.Published)
                     </td>

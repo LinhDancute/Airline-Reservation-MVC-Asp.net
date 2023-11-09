@@ -10,11 +10,11 @@ namespace App.Models.Blogs
 
         [Required(ErrorMessage = "Phải có tiêu đề bài viết")]
         [Display(Name = "Tiêu đề")]
-        [StringLength(160, MinimumLength = 5, ErrorMessage = "{0} dài {1} đến {2}")]
+        [StringLength(160, MinimumLength = 5, ErrorMessage = "{0} dài {2} đến {1}")]
         public string? Title { set; get; }
 
         [Display(Name = "Mô tả ngắn")]
-        public string Description { set; get; }
+        public string? Description { set; get; }
 
         [Display(Name = "Chuỗi định danh (url)", Prompt = "Nhập hoặc để trống tự phát sinh theo Title")]
         [StringLength(160, MinimumLength = 5, ErrorMessage = "{0} dài {1} đến {2}")]
@@ -22,17 +22,18 @@ namespace App.Models.Blogs
         public string? Slug { set; get; }
 
         [Display(Name = "Nội dung")]
-        public string Content { set; get; }
+        public string? Content { set; get; }
 
         [Display(Name = "Xuất bản")]
         public bool Published { set; get; }
         
-        [Required]
+        // [Required]
         [Display(Name = "Tác giả")]
-        public string AuthorId { set; get; }
+        public string? AuthorId { set; get; }
         [ForeignKey("AuthorId")]
         [Display(Name = "Tác giả")]
-        public AppUser Author { set; get; }
+        public AppUser? Author { set; get; }
+
 
         [Display(Name = "Ngày tạo")]
         public DateTime DateCreated { set; get; }
@@ -43,7 +44,7 @@ namespace App.Models.Blogs
         //relationship
         //many-to-many relationship with Category
        // public List<Category> Categories { get; set; } = new List<Category>();
-        public List<PostCategory> PostCategories { get; set; }
+        public List<PostCategory>? PostCategories { get; set; }
 
 
     }

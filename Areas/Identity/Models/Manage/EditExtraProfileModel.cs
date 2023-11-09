@@ -5,7 +5,7 @@ namespace App.Areas.Identity.Models.ManageViewModels
 {
   public class EditExtraProfileModel
   {
-        internal readonly string? HomeAddress;
+        // internal readonly string? HomeAddress;
 
         [Display(Name = "Tên tài khoản")]
       public string UserName { get; set; }
@@ -17,7 +17,7 @@ namespace App.Areas.Identity.Models.ManageViewModels
 
       [Display(Name = "Địa chỉ")]
       [StringLength(400)]
-      public string HomeAdress { get; set; }
+      public string HomeAddress { get; set; }
 
 
       [Display(Name = "Ngày sinh")]
